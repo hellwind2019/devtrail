@@ -1,0 +1,28 @@
+/trackify            ← Назва проєкту
+├── /cmd             ← Пакет для запуску програми
+│   └── main.go      ← Тут стартує твій додаток
+│
+├── /internal        ← Основна логіка (те, що не експортується з проєкту)
+│   ├── /auth        ← Авторизація користувачів (реєстрація, логін)
+│   │   └── handler.go
+│   │   └── service.go
+│   │
+│   ├── /github      ← Пакет для роботи з GitHub API
+│   │   └── client.go
+│   │   └── commits.go
+│   │
+│   ├── /models      ← Опис структур даних (User, Repository, CommitReport)
+│   │   └── models.go
+│   │
+│   ├── /storage     ← Робота з базою даних (можна SQLite, PostgreSQL)
+│   │   └── db.go
+│   │   └── user_repo.go
+│   │
+│   └── /server      ← HTTP сервер (якщо робиш веб)
+│       └── routes.go
+│       └── server.go
+│
+├── /configs         ← Конфігураційні файли (наприклад .env, config.yaml)
+│
+├── go.mod
+└── go.sum

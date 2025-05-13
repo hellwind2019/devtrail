@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 )
 
 /*
@@ -18,6 +19,7 @@ ShowRegisterPage(w http.ResponseWriter, r *http.Request)
 HandleLogin(w http.ResponseWriter, r *http.Request)
 */
 var tmpl = template.Must(template.ParseGlob("templates/*.html"))
+var sessionKey = []byte(os.Getenv("SESSION-KYE"))
 
 func HandleRegister(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")

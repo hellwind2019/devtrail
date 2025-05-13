@@ -1,11 +1,18 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func StartServer() {
+	godotenv.Load()
+	var sessionKey = []byte(os.Getenv("SESSION_KEY"))
+	fmt.Println(sessionKey)
 	mux := http.NewServeMux()
 
 	RegisterRoutes(mux)

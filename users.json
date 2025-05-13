@@ -1,26 +1,6 @@
 [
   {
-    "username": "adsfadsf",
-    "password": "asdfasdf"
-  },
-  {
-    "username": "my name",
-    "password": "passwod"
-  },
-  {
-    "username": "admin",
-    "password": "admin"
-  },
-  {
     "username": "123",
-    "password": "123"
-  },
-  {
-    "username": "1234",
-    "password": "1234"
-  },
-  {
-    "username": "12",
-    "password": "12"
+    "password": "$2a$10$t6XkTNM53byaCqK.U32adOTj5kk1VNx/eGqMA4gqYMg/Gakq/.rpO"
   }
 ]

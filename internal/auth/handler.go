@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"devtrail/internal/models"
+	"devtrail/internal/storage"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -56,16 +56,16 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Помилка парсингу форми", http.StatusBadRequest)
 			return
 		}
-		username := r.FormValue("login")
-		password := r.FormValue("password")
-
-		err = RegisterUser(models.User{Username: username, Password: password})
+		user, err := parseLoginForm(r)
+		hashedPassword, _ := storage.HashPassword(user.Password)
+		user.Password = hashedPassword
+		err = RegisterUser(user)
 		if err != nil {
 			http.Error(w, "Помилка реєстрації", http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, "%v успішно зареєстрований", username)
+		fmt.Fprintf(w, "%v успішно зареєстрований", user.Username)
 
 	}
 }

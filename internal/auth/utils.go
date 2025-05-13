@@ -2,6 +2,7 @@ package auth
 
 import (
 	"devtrail/internal/models"
+
 	"net/http"
 )
 

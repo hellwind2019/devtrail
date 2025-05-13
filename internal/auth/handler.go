@@ -60,7 +60,6 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, "%v успішно зареєстрований", username)
 
 	}
 }
@@ -70,7 +69,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   60,
 		HttpOnly: true,
 	}
-	fmt.Println("Session key: ", sessionKey)
 	w.Header().Set("Content-Type", "text/html")
 	if r.Method == http.MethodGet {
 		err := tmpl.ExecuteTemplate(w, "login.html", nil)
@@ -145,4 +143,15 @@ func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+func HandleLogout(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "auth-session")
+	if err != nil {
+		http.Error(w, "Помилка отримання сесії", http.StatusInternalServerError)
+		return
+	}
+	session.Options.MaxAge = -1
+	session.Save(r, w)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

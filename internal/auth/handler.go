@@ -34,6 +34,11 @@ func init() {
 	tmpl = template.Must(template.ParseGlob("templates/*.html"))
 	sessionKey = []byte(os.Getenv("SESSION_KEY"))
 	store = sessions.NewCookieStore(sessionKey)
+	store.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   60,
+		HttpOnly: true,
+	}
 }
 
 func HandleRegister(w http.ResponseWriter, r *http.Request) {
@@ -60,22 +65,14 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, "%v успішно зареєстрований", username)
 
 	}
 }
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
-	store.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   60,
-		HttpOnly: true,
-	}
 	w.Header().Set("Content-Type", "text/html")
 	if r.Method == http.MethodGet {
-		err := tmpl.ExecuteTemplate(w, "login.html", nil)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		renderTemplate(w, "login.html", nil)
 	} else if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
@@ -92,43 +89,32 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Помилка авторизації", http.StatusUnauthorized)
 			return
 		}
-		if valid {
-			session, _ := store.Get(r, "auth-session")
-			fmt.Printf("IsNew: %v \n", session.IsNew)
-			session.Values["username"] = user.Username
-			err := session.Save(r, w)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			fmt.Println(session.Values["username"])
-			http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
-		} else {
+		if !valid {
 			http.Error(w, "Неправильний логін або пароль", http.StatusUnauthorized)
+			return
 		}
-		// if valid {
-		// 	http.Redirect(w, r, "/dashboard?username="+user.Username, http.StatusSeeOther)
-		// } else {
-		// 	http.Error(w, "Неправильний логін або пароль", http.StatusUnauthorized)
-		// }
-	}
-
-}
-func HandleHome(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	if r.Method == http.MethodGet {
-		err := tmpl.ExecuteTemplate(w, "home.html", nil)
+		session, _ := store.Get(r, "auth-session")
+		fmt.Printf("IsNew: %v \n", session.IsNew)
+		session.Values["username"] = user.Username
+		err = session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+
+	}
+
+}
+func HandleHome(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		renderTemplate(w, "home.html", nil)
 	}
 }
 func HandleDashboard(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "auth-session")
-	username, ok := session.Values["username"].(string)
+	username, ok := getSessionUsername(r)
 	fmt.Printf("Ok: %v username: %v\n", ok, username)
-	if !ok || username == "" {
+	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
@@ -138,11 +124,7 @@ func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 		Username: username,
 	}
 
-	err := tmpl.ExecuteTemplate(w, "dashboard.html", data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	renderTemplate(w, "dashboard.html", data)
 }
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "auth-session")
@@ -154,4 +136,18 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func renderTemplate(w http.ResponseWriter, name string, data any) {
+	w.Header().Set("Content-Type", "text/html")
+	err := tmpl.ExecuteTemplate(w, name, data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func getSessionUsername(r *http.Request) (string, bool) {
+	session, _ := store.Get(r, "auth-session")
+	username, ok := session.Values["username"].(string)
+	return username, ok && username != ""
 }

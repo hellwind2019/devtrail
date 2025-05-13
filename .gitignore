@@ -25,4 +25,4 @@ go.work.sum
 .env
 
 simple_server.go
-temps
+temps/

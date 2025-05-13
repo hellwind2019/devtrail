@@ -74,17 +74,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		renderTemplate(w, "login.html", nil)
 	} else if r.Method == http.MethodPost {
-		err := r.ParseForm()
+		user, err := parseLoginForm(r)
 		if err != nil {
 			http.Error(w, "Помилка парсингу форми", http.StatusBadRequest)
 			return
 		}
-		user := models.User{
-			Username: r.FormValue("login"),
-			Password: r.FormValue("password"),
-		}
 		valid, err := LoginUser(user)
-
 		if err != nil {
 			http.Error(w, "Помилка авторизації", http.StatusUnauthorized)
 			return
@@ -94,7 +89,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		session, _ := store.Get(r, "auth-session")
-		fmt.Printf("IsNew: %v \n", session.IsNew)
 		session.Values["username"] = user.Username
 		err = session.Save(r, w)
 		if err != nil {
@@ -111,6 +105,7 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		renderTemplate(w, "home.html", nil)
 	}
 }
+
 func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 	username, ok := getSessionUsername(r)
 	fmt.Printf("Ok: %v username: %v\n", ok, username)
@@ -136,18 +131,4 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
-}
-
-func renderTemplate(w http.ResponseWriter, name string, data any) {
-	w.Header().Set("Content-Type", "text/html")
-	err := tmpl.ExecuteTemplate(w, name, data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func getSessionUsername(r *http.Request) (string, bool) {
-	session, _ := store.Get(r, "auth-session")
-	username, ok := session.Values["username"].(string)
-	return username, ok && username != ""
 }

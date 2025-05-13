@@ -4,15 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>DevTracker</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 
 <body>
-    <h1>Register</h1>
-    <form method="POST">
-        <input type="text" name="login" placeholder="Enter your login">
-        <input type="text" name="password" placeholder="Enter your password">
-        <button type="submit">Submit</button>
-    </form>
+    <div class="card">
+        <h1>Register</h1>
+        <form method="POST">
+            <label for="login">Login</label>
+            <input type="text" id="login" name="login" placeholder="Enter your login">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+            <button type="submit" class="register">Register</button>
+            <a href="/login"><button type="button">Login</button></a>
+        </form>
+    </div>
 </body>
 
 </html>

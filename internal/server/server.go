@@ -8,6 +8,8 @@ import (
 func StartServer() {
 
 	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	RegisterRoutes(mux)
 

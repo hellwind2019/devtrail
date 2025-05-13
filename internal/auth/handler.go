@@ -108,7 +108,6 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 
 func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 	username, ok := getSessionUsername(r)
-	fmt.Printf("Ok: %v username: %v\n", ok, username)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return

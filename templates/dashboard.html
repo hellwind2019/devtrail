@@ -6,10 +6,21 @@
      <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+    <header>
+        <div class="logo"></div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/dashboard">Головна</a></li>
+                <li><a href="/settings">Налаштування</a></li>
+                <li><a href="/logout">Вийти</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="card">
         <h1>Привіт, {{.Username}}!</h1>
         <p>Вітаю в твоєму кабінеті.</p>
         <a href="/logout">Вийти</a>
     </div>
+   
 </body>
 </html>

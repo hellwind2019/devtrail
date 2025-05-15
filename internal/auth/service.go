@@ -7,7 +7,7 @@ import (
 
 func RegisterUser(user models.User) error {
 
-	err := storage.SaveUserToJson(user)
+	err := storage.SaveUserToDB(user)
 	if err != nil {
 		return err
 	}
@@ -15,7 +15,7 @@ func RegisterUser(user models.User) error {
 }
 
 func LoginUser(user models.User) (bool, error) {
-	valid, err := storage.CheckUserCredentialsJson(user)
+	valid, err := storage.CheckUserCredentialsDB(user)
 	if err != nil {
 		return false, err
 	}

@@ -14,7 +14,8 @@ import (
 var db *sql.DB
 
 func init() {
-	db, err := sql.Open("sqlite", "users.db")
+	var err error
+	db, err = sql.Open("sqlite", "users.db")
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 
@@ -31,9 +32,12 @@ func init() {
 	}
 
 }
-func SaveUserToDB(username, password string) error {
+func SaveUserToDB(user models.User) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
 	query := `INSERT INTO users (username, password) VALUES (?, ?)`
-	_, err := db.Exec(query, username, password)
+	_, err := db.Exec(query, user.Username, user.Password)
 	if err != nil {
 		return err
 	}
@@ -41,6 +45,9 @@ func SaveUserToDB(username, password string) error {
 }
 
 func DeleteUserFromDB(username string) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
 	query := `DELETE FROM users WHERE username = ?`
 	result, err := db.Exec(query, username)
 	if err != nil {
@@ -53,9 +60,9 @@ func DeleteUserFromDB(username string) error {
 	return nil
 }
 
-func CheckUserCredentials(username, password string) (bool, error) {
+func CheckUserCredentialsDB(user models.User) (bool, error) {
 	query := `SELECT password FROM users WHERE username = ?`
-	row := db.QueryRow(query, username)
+	row := db.QueryRow(query, user.Username)
 
 	var hashedPassword string
 	err := row.Scan(&hashedPassword)
@@ -66,7 +73,7 @@ func CheckUserCredentials(username, password string) (bool, error) {
 	}
 
 	// Compare the provided password with the hashed password
-	if CheckPasswordHash(password, hashedPassword) {
+	if CheckPasswordHash(user.Password, hashedPassword) {
 		return true, nil
 	}
 	return false, nil
@@ -84,6 +91,9 @@ func SaveUserToJson(user models.User) error {
 }
 
 func CheckUserCredentialsJson(user models.User) (bool, error) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
 	users := loadUsers()
 	for _, savedUser := range users {
 		if savedUser.Username == user.Username {
@@ -102,4 +112,12 @@ func loadUsers() []models.User {
 		_ = json.Unmarshal(file, &users)
 	}
 	return users
+}
+func CloseDB() {
+	if db != nil {
+		err := db.Close()
+		if err != nil {
+			log.Println("Error closing database:", err)
+		}
+	}
 }

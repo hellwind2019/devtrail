@@ -1,6 +1,7 @@
 package server
 
 import (
+	"devtrail/internal/storage"
 	"log"
 	"net/http"
 )
@@ -19,4 +20,5 @@ func StartServer() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	storage.CloseDB()
 }

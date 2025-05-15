@@ -15,7 +15,7 @@ func RegisterUser(user models.User) error {
 }
 
 func LoginUser(user models.User) (bool, error) {
-	valid, err := storage.CheckUserCredentials(user)
+	valid, err := storage.CheckUserCredentialsJson(user)
 	if err != nil {
 		return false, err
 	}

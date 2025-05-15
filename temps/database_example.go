@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	note := "Мій перший запис у базі"
+	note := "Крутий запис у базі даних!"
 	_, err = db.Exec("INSERT INTO notes (content) VALUES (?)", note)
 	if err != nil {
 		log.Fatal("Помилка додавання запису:", err)

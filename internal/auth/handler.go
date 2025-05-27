@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"devtrail/internal/models"
 	"devtrail/internal/storage"
 	"fmt"
 	"html/template"
@@ -112,10 +113,25 @@ func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+	userID, err := storage.GetUserIDByUsername(username)
+	if err != nil {
+		http.Error(w, "Error retrieving user ID", http.StatusInternalServerError)
+		return
+	}
+
+	projects, err := storage.GetProjectsByUserID(userID)
+
+	if err != nil {
+		http.Error(w, "Error retrieving projects", http.StatusInternalServerError)
+		return
+	}
+
 	data := struct {
 		Username string
+		Projects []models.Project
 	}{
 		Username: username,
+		Projects: projects,
 	}
 
 	renderTemplate(w, "dashboard.html", data)

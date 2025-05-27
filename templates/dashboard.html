@@ -23,6 +23,15 @@
         <p>Вітаю в твоєму кабінеті.</p>
         <a href="/logout">Вийти</a>
     </div>
+    <div class="card">
+        <button>Add new Project</button>
+    </div>
+    {{range .Projects}}
+    <div class="card">
+        <h2>{{.Name}}</h2>
+        <p>{{.Description}}</p>
+    </div>
+   {{end}}
    
 </body>
 </html>

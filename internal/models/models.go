@@ -5,6 +5,13 @@ type User struct {
 	Password string `json:"password"`
 }
 
+type Project struct {
+	ProjectID   int
+	UserID      int
+	Name        string
+	Description string
+}
+
 type Repository struct {
 	ID       int
 	UserID   int

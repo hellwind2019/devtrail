@@ -25,7 +25,17 @@ func init() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
-    );`
+    );
+	
+	CREATE TABLE IF NOT EXISTS projects (
+   	 	ProjectID int NOT NULL,
+    	userId int,
+		ProjectName TEXT NOT NULL,
+		ProjectDescription TEXT,
+   		PRIMARY KEY (ProjectID),
+    	FOREIGN KEY (userId) REFERENCES users(id)
+	);`
+
 	_, err = db.Exec(createTableQuery)
 	if err != nil {
 		log.Fatal("Failed to create users table:", err)
@@ -58,6 +68,43 @@ func DeleteUserFromDB(username string) error {
 		return errors.New("user not found")
 	}
 	return nil
+}
+func GetProjectsByUserID(userID int) ([]models.Project, error) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `SELECT ProjectID, userId, ProjectName, ProjectDescription FROM projects WHERE userId = ?`
+	rows, err := db.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var projects []models.Project
+	for rows.Next() {
+		var project models.Project
+		if err := rows.Scan(&project.ProjectID, &project.UserID, &project.Name, &project.Description); err != nil {
+			return nil, err
+		}
+		projects = append(projects, project)
+	}
+	return projects, nil
+}
+func GetUserIDByUsername(username string) (int, error) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `SELECT id FROM users WHERE username = ?`
+	row := db.QueryRow(query, username)
+
+	var userID int
+	err := row.Scan(&userID)
+	if err == sql.ErrNoRows {
+		return 0, errors.New("user not found")
+	} else if err != nil {
+		return 0, err
+	}
+	return userID, nil
 }
 
 func CheckUserCredentialsDB(user models.User) (bool, error) {

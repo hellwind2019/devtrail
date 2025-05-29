@@ -28,11 +28,10 @@ func init() {
     );
 	
 	CREATE TABLE IF NOT EXISTS projects (
-   	 	ProjectID int NOT NULL,
+   	 	id INTEGER PRIMARY KEY AUTOINCREMENT,
     	userId int,
 		ProjectName TEXT NOT NULL,
 		ProjectDescription TEXT,
-   		PRIMARY KEY (ProjectID),
     	FOREIGN KEY (userId) REFERENCES users(id)
 	);`
 
@@ -73,7 +72,7 @@ func GetProjectsByUserID(userID int) ([]models.Project, error) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")
 	}
-	query := `SELECT ProjectID, userId, ProjectName, ProjectDescription FROM projects WHERE userId = ?`
+	query := `SELECT id, userId, ProjectName, ProjectDescription FROM projects WHERE userId = ? ORDER BY id DESC`
 	rows, err := db.Query(query, userID)
 	if err != nil {
 		return nil, err
@@ -125,7 +124,17 @@ func CheckUserCredentialsDB(user models.User) (bool, error) {
 	}
 	return false, nil
 }
-
+func CreateProject(project models.Project) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `INSERT INTO projects (userId, ProjectName, ProjectDescription) VALUES (?, ?, ?)`
+	_, err := db.Exec(query, project.UserID, project.Name, project.Description)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func SaveUserToJson(user models.User) error {
 	users := loadUsers()
 	users = append(users, user)

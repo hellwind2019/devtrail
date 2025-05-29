@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <title>Мій кабінет</title>
-     <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <header>
         <div class="logo">
-            
+
         </div>
         <nav class="navbar">
             <ul>
@@ -24,14 +26,34 @@
         <a href="/logout">Вийти</a>
     </div>
     <div class="card">
-        <button>Add new Project</button>
+        <div id="create-project-form">
+            <form method="POST" action="/create-project">
+                <input type="text" name="name" placeholder="Project name" required>
+                <input type="text" name="description" placeholder="Project description"></textarea>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+        <button id="create-project-button" onclick="toggleForm()">Create new Project</button>
+
+
     </div>
     {{range .Projects}}
     <div class="card">
         <h2>{{.Name}}</h2>
         <p>{{.Description}}</p>
     </div>
-   {{end}}
-   
+    {{end}}
+
 </body>
+
+<script>
+    function toggleForm() {
+        var form = document.getElementById("create-project-form");
+        var button = document.getElementById("create-project-button");
+        button.textContent = (form.classList.contains("show")) ? "Create new Project" : "Cancel";
+        button.style.backgroundColor = (form.classList.contains("show")) ?  "#4CAF50": "#f44336";
+        form.classList.toggle("show");
+    }
+</script>
+
 </html>

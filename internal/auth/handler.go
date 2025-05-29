@@ -147,3 +147,36 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
+
+func HandleCreateProject(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "auth-session")
+	username, ok := session.Values["username"].(string)
+	if !ok || username == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	if r.Method != "POST" {
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+		return
+	}
+
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+	userId, err := storage.GetUserIDByUsername(username)
+	if err != nil {
+		http.Error(w, "Не вдалося отримати ID користувача", http.StatusInternalServerError)
+		return
+	}
+	err = storage.CreateProject(models.Project{
+		UserID:      userId,
+		Name:        name,
+		Description: description,
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+}

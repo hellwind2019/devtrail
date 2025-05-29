@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/sessions"
 	"github.com/joho/godotenv"
@@ -142,7 +143,7 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Помилка отримання сесії", http.StatusInternalServerError)
 		return
 	}
-	session.Options.MaxAge = -1
+	session.Options.MaxAge = 7200
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -179,4 +180,35 @@ func HandleCreateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+}
+func HandleDeleteProject(w http.ResponseWriter, r *http.Request) {
+	// Перевірка сесії користувача
+	session, _ := store.Get(r, "auth-session")
+	username, ok := session.Values["username"].(string)
+	fmt.Println("Проект з ID успішно видалено")
+	if !ok || username == "" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Отримання ID проекту з URL
+	projectID := r.URL.Path[len("/delete-project/"):]
+	if projectID == "" {
+		http.Error(w, "Project ID is required", http.StatusBadRequest)
+		return
+	}
+
+	// Видалення проекту з бази даних
+	projectIDint, error := strconv.Atoi(projectID)
+	if error != nil {
+		http.Error(w, "Invalid project ID", http.StatusBadRequest)
+		return
+	}
+	err := storage.DeleteProjectByID(projectIDint)
+	if err != nil {
+		http.Error(w, "Error deleting project: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

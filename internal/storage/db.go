@@ -89,6 +89,21 @@ func GetProjectsByUserID(userID int) ([]models.Project, error) {
 	}
 	return projects, nil
 }
+func DeleteProjectByID(projectID int) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `DELETE FROM projects WHERE id = ?`
+	result, err := db.Exec(query, projectID)
+	if err != nil {
+		return err
+	}
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		return errors.New("project not found")
+	}
+	return nil
+}
 func GetUserIDByUsername(username string) (int, error) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Page</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="project-page">
+        <div class="card project-info">
+            <h1>{{.Name}}</h1>
+            <p>{{.Description}}</p>
+        </div>
+
+        <!-- Placeholder for progress tracking (heatmap) -->
+        <div class="card progress-tracking">
+            <h2>Progress Tracking</h2>
+            <p>Heatmap will be added here.</p>
+        </div>
+
+        <!-- Button to add a new commit -->
+        <div class="card add-commit">
+            <h2>Add Commit</h2>
+            <form method="POST" action="/add-commit">
+                <textarea name="message" placeholder="Commit message" required></textarea>
+                <button type="submit">Add Commit</button>
+            </form>
+        </div>
+
+        <!-- List of commits -->
+        <div class="card commits">
+            <h2>Commits</h2>
+            <ul>
+                {{range .Commits}}
+                <li>
+                    <strong>{{.Date}}</strong>: {{.Message}}
+                </li>
+                {{end}}
+            </ul>
+        </div>
+    </main>
+</body>
+
+</html>

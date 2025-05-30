@@ -38,11 +38,11 @@
 
     </div>
     {{range .Projects}}
-    <div class="card" id="project-{{.ProjectID}}">
+    <div class="card" id="project-{{.ProjectID}}" onclick="loadProject('{{ .ProjectID }}')">
         <h2>{{.Name}}</h2>
         <p>{{.Description}}</p>
         <p>ID: {{.ProjectID}}</p>
-        <button onclick="deleteProject('{{ .ProjectID }}')">🗑 Видалити</button>
+        <button onclick="event.stopPropagation(); deleteProject('{{ .ProjectID }}')">🗑 Видалити</button>
     </div>
     {{end}}
 
@@ -70,6 +70,10 @@
             });
         }
     }
+    function loadProject(projectId) {
+        window.location.href = "/projects/" + projectId;
+    }
+
 </script>
 
 </html>

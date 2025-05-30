@@ -19,8 +19,8 @@
     </header>
     <main class="project-page">
         <div class="card project-info">
-            <h1>{{.Name}}</h1>
-            <p>{{.Description}}</p>
+            <h1>{{.Project.Name}}</h1>
+            <p>{{.Project.Description}}</p>
         </div>
 
         <!-- Placeholder for progress tracking (heatmap) -->
@@ -42,11 +42,11 @@
         <div class="card commits">
             <h2>Commits</h2>
             <ul>
-                {{range .Commits}}
+                <!-- {{range .Commits}}
                 <li>
                     <strong>{{.Date}}</strong>: {{.Message}}
                 </li>
-                {{end}}
+                {{end}} -->
             </ul>
         </div>
     </main>

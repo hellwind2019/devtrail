@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS commits (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     projectId INTEGER NOT NULL,
     message TEXT NOT NULL,
-    date TEXT NOT NULL,
     rating INTEGER,
     date TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (projectId) REFERENCES projects(id) ON DELETE CASCADE

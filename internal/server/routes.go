@@ -14,4 +14,5 @@ func RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/create-project", handlers.HandleCreateProject)
 	mux.HandleFunc("/delete-project/", handlers.HandleDeleteProject)
 	mux.HandleFunc("/projects/", handlers.HandleProjectPage)
+	mux.HandleFunc("/add-commit", handlers.HandleAddCommit)
 }

@@ -161,8 +161,8 @@ func AddCommit(commit models.Commit) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")
 	}
-	query := `INSERT INTO commit_reports (projectId, message, rating, date) VALUES (?, ?, ?, ?)`
-	_, err := db.Exec(query, commit.ProjectId, commit.Message, commit.Rating, commit.Date)
+	query := `INSERT INTO commits(projectId, message, rating) VALUES (?, ?, ?)`
+	_, err := db.Exec(query, commit.ProjectId, commit.Message, commit.Rating)
 	if err != nil {
 		log.Println("Error adding commit report:", err)
 	}

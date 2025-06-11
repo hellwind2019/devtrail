@@ -33,7 +33,9 @@
         <div class="card add-commit">
             <h2>Add Commit</h2>
             <form method="POST" action="/add-commit">
+                <input type="hidden" name="project_id" value="{{.Project.ProjectID}}">
                 <textarea name="message" placeholder="Commit message" required></textarea>
+                <input type="number" name="rating" min="1" max="5" placeholder="Rating (1-5)" required>
                 <button type="submit">Add Commit</button>
             </form>
         </div>

@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"devtrail/internal/models"
+	"path"
+	"strconv"
 
 	"net/http"
 )
@@ -28,4 +30,18 @@ func parseLoginForm(r *http.Request) (models.User, error) {
 		Username: r.FormValue("login"),
 		Password: r.FormValue("password"),
 	}, nil
+}
+func GetCurrentProjectId(r *http.Request, w http.ResponseWriter) (int, bool) {
+	projectID := path.Base(r.URL.Path)
+	if projectID == "" {
+		http.Error(w, "Project ID is required", http.StatusBadRequest)
+		return 0, true
+	}
+
+	projectIDint, err := strconv.Atoi(projectID)
+	if err != nil {
+		http.Error(w, "Invalid project ID", http.StatusBadRequest)
+		return 0, true
+	}
+	return projectIDint, false
 }

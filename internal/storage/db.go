@@ -157,7 +157,7 @@ func CreateProject(project models.Project) error {
 	}
 	return nil
 }
-func AddCommit(commit models.CommitReport) {
+func AddCommit(commit models.Commit) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")
 	}
@@ -167,7 +167,7 @@ func AddCommit(commit models.CommitReport) {
 		log.Println("Error adding commit report:", err)
 	}
 }
-func GetCommitsByProjectID(projectID int) ([]models.CommitReport, error) {
+func GetCommitsByProjectID(projectID int) ([]models.Commit, error) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")
 	}
@@ -178,9 +178,9 @@ func GetCommitsByProjectID(projectID int) ([]models.CommitReport, error) {
 	}
 	defer rows.Close()
 
-	var commits []models.CommitReport
+	var commits []models.Commit
 	for rows.Next() {
-		var commit models.CommitReport
+		var commit models.Commit
 		if err := rows.Scan(&commit.ID, &commit.ProjectId, &commit.Message, &commit.Rating, &commit.Date); err != nil {
 			return nil, err
 		}

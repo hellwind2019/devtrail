@@ -19,7 +19,7 @@ type Repository struct {
 	RepoName string
 }
 
-type CommitReport struct {
+type Commit struct {
 	ID        int
 	ProjectId int
 	Message   string

@@ -57,6 +57,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		session, _ := store.Get(r, "auth-session")
 		session.Values["username"] = user.Username
+		session.Options.MaxAge = 3600 // 1 година
 		err = session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -67,14 +68,14 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "auth-session")
 	if err != nil {
 		http.Error(w, "Помилка отримання сесії", http.StatusInternalServerError)
 		return
 	}
-	session.Options.MaxAge = 7200
+	session.Options.MaxAge = -1
+
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)

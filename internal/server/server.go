@@ -15,7 +15,7 @@ func StartServer() {
 	RegisterRoutes(mux)
 
 	// Запускаємо сервер
-	log.Println("Сервер стартує на http://127.0.0.1:8080")
+	log.Println("Server started at http://127.0.0.1:8080")
 	err := http.ListenAndServe("127.0.0.1:8080", mux)
 	if err != nil {
 		log.Fatal(err)

@@ -20,9 +20,9 @@ type Repository struct {
 }
 
 type CommitReport struct {
-	ID         int
-	Repository int
-	CommitHash string
-	Message    string
-	Date       string
+	ID        int
+	ProjectId int
+	Message   string
+	Rating    int
+	Date      string
 }

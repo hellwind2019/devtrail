@@ -18,6 +18,6 @@ CREATE TABLE IF NOT EXISTS commits (
     message TEXT NOT NULL,
     date TEXT NOT NULL,
     rating INTEGER,
-    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    date TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (projectId) REFERENCES projects(id) ON DELETE CASCADE
 );

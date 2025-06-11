@@ -136,12 +136,11 @@ func AuthenticateUser(user models.User) (bool, error) {
 	var hashedPassword string
 	err := row.Scan(&hashedPassword)
 	if err == sql.ErrNoRows {
-		return false, nil // User not found
+		return false, nil
 	} else if err != nil {
 		return false, err
 	}
 
-	// Compare the provided password with the hashed password
 	if CheckPasswordHash(user.Password, hashedPassword) {
 		return true, nil
 	}
@@ -157,6 +156,37 @@ func CreateProject(project models.Project) error {
 		return err
 	}
 	return nil
+}
+func AddCommit(commit models.CommitReport) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `INSERT INTO commit_reports (projectId, message, rating, date) VALUES (?, ?, ?, ?)`
+	_, err := db.Exec(query, commit.ProjectId, commit.Message, commit.Rating, commit.Date)
+	if err != nil {
+		log.Println("Error adding commit report:", err)
+	}
+}
+func GetCommitsByProjectID(projectID int) ([]models.CommitReport, error) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `SELECT id, projectId, message, rating, date FROM commit_reports WHERE projectId = ? ORDER BY id DESC`
+	rows, err := db.Query(query, projectID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var commits []models.CommitReport
+	for rows.Next() {
+		var commit models.CommitReport
+		if err := rows.Scan(&commit.ID, &commit.ProjectId, &commit.Message, &commit.Rating, &commit.Date); err != nil {
+			return nil, err
+		}
+		commits = append(commits, commit)
+	}
+	return commits, nil
 }
 
 func CloseDB() {

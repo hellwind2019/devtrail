@@ -171,7 +171,7 @@ func GetCommitsByProjectID(projectID int) ([]models.Commit, error) {
 	if db == nil {
 		log.Fatal("Database connection is not initialized")
 	}
-	query := `SELECT id, projectId, message, rating, date FROM commit_reports WHERE projectId = ? ORDER BY id DESC`
+	query := `SELECT id, projectId, message, rating, date FROM commits WHERE projectId = ? ORDER BY id DESC`
 	rows, err := db.Query(query, projectID)
 	if err != nil {
 		return nil, err

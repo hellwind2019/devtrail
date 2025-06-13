@@ -28,7 +28,13 @@
             <h2>Progress Tracking</h2>
             <p>Heatmap will be added here.</p>
         </div>
-
+         <div class="card ai-reviev">
+            <h2>AI Reviev</h2>
+            <form action="/get-ai-review" method="POST">
+                <input type="hidden" name="project_id" value="{{.Project.ProjectID}}">
+                <button type="submit">Get AI Review</button>
+            </form>
+        </div>
         <!-- Button to add a new commit -->
         <div class="card add-commit">
             <h2>Add Commit</h2>
@@ -40,15 +46,14 @@
             </form>
         </div>
 
-        <!-- List of commits -->
         <div class="card commits">
             <h2>Commits</h2>
             <ul>
-                <!-- {{range .Commits}}
+                {{range .Commits}}
                 <li>
                     <strong>{{.Date}}</strong>: {{.Message}}
                 </li>
-                {{end}} -->
+                {{end}}
             </ul>
         </div>
     </main>

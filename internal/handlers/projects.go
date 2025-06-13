@@ -3,6 +3,7 @@ package handlers
 import (
 	"devtrail/internal/models"
 	"devtrail/internal/storage"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -104,12 +105,17 @@ func HandleProjectPage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Access denied: You do not own this project", http.StatusForbidden)
 		return
 	}
+	commits, err := storage.GetCommitsByProjectID(projectID)
+	if err != nil {
+		log.Printf("Error retrieving commits for project %d: %v", projectID, err)
+	}
 
-	// Передача даних у шаблон
 	data := struct {
 		Project models.Project
+		Commits []models.Commit
 	}{
 		Project: project,
+		Commits: commits,
 	}
 
 	renderTemplate(w, "project.html", data)

@@ -8,17 +8,17 @@ import (
 
 func HandleRegister(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
 		err := tmpl.ExecuteTemplate(w, "register.html", nil)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else if r.Method == http.MethodPost {
-		// Спочатку парсимо форму
+	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, "Помилка парсингу форми", http.StatusBadRequest)
+			http.Error(w, "Error parsing form ", http.StatusBadRequest)
 			return
 		}
 		user, _ := parseLoginForm(r)
@@ -28,31 +28,32 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 
 		err = RegisterUser(user)
 		if err != nil {
-			http.Error(w, "Помилка реєстрації", http.StatusInternalServerError)
+			http.Error(w, "Registration error", http.StatusInternalServerError)
 			return
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprintf(w, "%v успішно зареєстрований", user.Username)
+		fmt.Fprintf(w, "%v succesfuly registered", user.Username)
 
 	}
 }
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
 		renderTemplate(w, "login.html", nil)
-	} else if r.Method == http.MethodPost {
+	case http.MethodPost:
 		user, err := parseLoginForm(r)
 		if err != nil {
-			http.Error(w, "Помилка парсингу форми", http.StatusBadRequest)
+			http.Error(w, "Error parsing form", http.StatusBadRequest)
 			return
 		}
 		valid, err := LoginUser(user)
 		if err != nil {
-			http.Error(w, "Помилка авторизації", http.StatusUnauthorized)
+			http.Error(w, "Authorization error", http.StatusUnauthorized)
 			return
 		}
 		if !valid {
-			http.Error(w, "Неправильний логін або пароль", http.StatusUnauthorized)
+			http.Error(w, "Incorrect login or password", http.StatusUnauthorized)
 			return
 		}
 		session, _ := store.Get(r, "auth-session")
@@ -71,7 +72,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "auth-session")
 	if err != nil {
-		http.Error(w, "Помилка отримання сесії", http.StatusInternalServerError)
+		http.Error(w, "Error retrieving session", http.StatusInternalServerError)
 		return
 	}
 	session.Options.MaxAge = -1

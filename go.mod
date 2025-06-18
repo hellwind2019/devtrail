@@ -14,11 +14,11 @@ require (
 	modernc.org/libc v1.62.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.9.1 // indirect
-	modernc.org/sqlite v1.37.0 // indirect
 )
 
 require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.38.0
+	modernc.org/sqlite v1.37.0
 )

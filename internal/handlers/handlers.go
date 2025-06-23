@@ -34,7 +34,15 @@ func init() {
 
 func HandleHome(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		renderTemplate(w, "home.html", nil)
+		data := struct {
+			OAuthInfo models.OAuthInfo
+		}{
+			OAuthInfo: models.OAuthInfo{
+				ClientID:     os.Getenv("GH_BASIC_CLIENT_ID"),
+				ClientSecret: os.Getenv("GH_BASIC_CLIENT_SECRET"),
+			},
+		}
+		renderTemplate(w, "home.html", data)
 	}
 }
 

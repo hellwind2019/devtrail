@@ -58,7 +58,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		session, _ := store.Get(r, "auth-session")
 		session.Values["username"] = user.Username
-		session.Options.MaxAge = 3600 // 1 година
+		session.Options.MaxAge = 3600 // 1 hour
 		err = session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

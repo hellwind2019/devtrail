@@ -9,6 +9,7 @@ func RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/", handlers.HandleHome)
 	mux.HandleFunc("/register", handlers.HandleRegister)
 	mux.HandleFunc("/login", handlers.HandleLogin)
+	mux.HandleFunc("/github-auth", handlers.HandleGitHubAuth)
 	mux.HandleFunc("/dashboard", handlers.HandleDashboard)
 	mux.HandleFunc("/logout", handlers.HandleLogout)
 	mux.HandleFunc("/create-project", handlers.HandleCreateProject)

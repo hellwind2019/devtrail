@@ -26,3 +26,7 @@ type Commit struct {
 	Rating    int
 	Date      string
 }
+type OAuthInfo struct {
+	ClientID     string
+	ClientSecret string
+}

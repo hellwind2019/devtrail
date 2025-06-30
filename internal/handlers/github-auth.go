@@ -14,7 +14,7 @@ import (
 
 func HandleGitHubAuth(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		renderTemplate(w, "github-auth.html", nil)
+		// renderTemplate(w, "github-auth.html", nil)
 		code := r.URL.Query().Get("code")
 		fmt.Println("Authorization code:", code)
 		OAuthInfo := models.OAuthInfo{
@@ -46,10 +46,11 @@ func HandleGitHubAuth(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		token := result["access_token"].(string)
-		session, _ := store.Get(r, AuthSessionName)
+		session, _ := store.Get(r, "gh-token")
 		session.Values["github_token"] = token
 		session.Save(r, w)
-		fmt.Println("Access Token:", token)
+
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}
 

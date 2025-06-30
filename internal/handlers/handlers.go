@@ -67,11 +67,16 @@ func HandleDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := struct {
-		Username string
-		Projects []models.Project
+		Username  string
+		Projects  []models.Project
+		OAuthInfo models.OAuthInfo
 	}{
 		Username: username,
 		Projects: projects,
+		OAuthInfo: models.OAuthInfo{
+			ClientID:     os.Getenv("GH_BASIC_CLIENT_ID"),
+			ClientSecret: os.Getenv("GH_BASIC_CLIENT_SECRET"),
+		},
 	}
 
 	renderTemplate(w, "dashboard.html", data)

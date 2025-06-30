@@ -17,3 +17,13 @@ Inspired by Boot.dev and habit trackers, but focused on personal projects and de
 - **Go**
 - **HTML (templates)**
 - **Gorilla Sessions**
+
+
+## Setup .env
+
+Variables :
+```
+SESSION_KEY= any value for session enctyprion
+GH_BASIC_CLIENT_ID = client id form github oauth
+GH_BASIC_CLIENT_SECRET = ***********************
+```

@@ -46,33 +46,16 @@ func HandleGitHubAuth(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		token := result["access_token"].(string)
-		fmt.Println("Token:", token)
-
-		body, err = makeGitHubRequest("GET", "https://api.github.com/user/repos", token)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		type Repo struct {
-			Name        string `json:"name"`
-			Description string `json:"description"`
-			Private     bool   `json:"private"`
-		}
-		var repos []Repo
-		err = json.Unmarshal(body, &repos)
-		if err != nil {
-			log.Fatal("Failed to parse JSON: ", err)
-		}
-		for _, repo := range repos {
-			fmt.Printf("Name: %s\nDescription: %s\nPrivate: %v\n\n", repo.Name, repo.Description, repo.Private)
-		}
-
+		session, _ := store.Get(r, AuthSessionName)
+		session.Values["github_token"] = token
+		session.Save(r, w)
+		fmt.Println("Access Token:", token)
 		return
 	}
 
 }
 
-func makeGitHubRequest(method, url, token string) ([]byte, error) {
+func MakeGitHubRequest(method, url, token string) ([]byte, error) {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return nil, err

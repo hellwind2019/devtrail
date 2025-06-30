@@ -40,7 +40,7 @@ func HandleCreateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func getSessionUser(r *http.Request, w http.ResponseWriter) (string, bool) {
-	session, _ := store.Get(r, "auth-session")
+	session, _ := store.Get(r, AuthSessionName)
 	username, ok := session.Values["username"].(string)
 	if !ok || username == "" {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)

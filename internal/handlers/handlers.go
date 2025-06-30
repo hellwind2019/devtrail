@@ -15,6 +15,7 @@ import (
 var tmpl *template.Template
 var sessionKey []byte
 var store *sessions.CookieStore
+var AuthSessionName = "auth-session"
 
 func init() {
 	// Завантажуємо змінні середовища з файлу .env

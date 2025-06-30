@@ -17,7 +17,7 @@ func renderTemplate(w http.ResponseWriter, name string, data any) {
 }
 
 func getSessionUsername(r *http.Request) (string, bool) {
-	session, _ := store.Get(r, "auth-session")
+	session, _ := store.Get(r, AuthSessionName)
 	username, ok := session.Values["username"].(string)
 	return username, ok && username != ""
 }

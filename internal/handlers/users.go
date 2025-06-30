@@ -56,7 +56,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Incorrect login or password", http.StatusUnauthorized)
 			return
 		}
-		session, _ := store.Get(r, "auth-session")
+		session, _ := store.Get(r, AuthSessionName)
 		session.Values["username"] = user.Username
 		session.Options.MaxAge = 3600 // 1 hour
 		err = session.Save(r, w)
@@ -70,7 +70,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 }
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "auth-session")
+	session, err := store.Get(r, AuthSessionName)
 	if err != nil {
 		http.Error(w, "Error retrieving session", http.StatusInternalServerError)
 		return

@@ -1,40 +1,122 @@
+:root {
+    --color-shadow: rgba(0, 0, 0, 0.18);
+    --color-shadow-strong: rgba(0, 0, 0, 0.32);
+}
+
 .modal {
     display: none;
     position: fixed;
     z-index: 1000;
     left: 0; top: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(18, 10, 27, 0.85); /* use --color-bg with opacity */
     justify-content: center;
     align-items: center;
 }
+
 .modal-content {
-    background: #232323;
+    background: var(--color-bg-card);
     margin: 10% auto;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 28px 24px 24px 24px;
+    border-radius: 12px;
     width: 90%;
     max-width: 400px;
-    color: #e0e0e0;
+    color: var(--color-text);
     position: relative;
+    box-shadow: 0 8px 32px var(--color-shadow-strong);
+    border: 1.5px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
+
 .modal .close {
     position: absolute;
-    right: 16px;
-    top: 8px;
+    right: 18px;
+    top: 10px;
     font-size: 28px;
+    color: var(--color-accent);
     cursor: pointer;
-}
-.repo-btn {
-    width: 100%;
     background: none;
     border: none;
-    color: #4CAF50;
-    text-align: left;
-    padding: 8px;
+    transition: color 0.18s;
+}
+.modal .close:hover {
+    color: var(--color-link);
+}
+
+.modal-content label {
+    color: var(--color-accent);
+    font-weight: bold;
+    margin-bottom: 6px;
+    margin-top: 12px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 8px 0 16px 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-bg-input);
+    color: var(--color-text);
     font-size: 16px;
+}
+
+.modal-content button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    font-size: 17px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    margin-top: 10px;
 }
-.repo-btn:hover {
-    background: #333;
+
+.modal-content button[type="submit"]:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-bg);
+    box-shadow: 0 2px 8px var(--color-shadow-strong);
 }
-/* ...existing code... */
+
+.repo-btn {
+    width: 100%;
+    background: linear-gradient(90deg, var(--color-bg-input) 0%, var(--color-bg-list) 100%);
+    border: 1.5px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-accent);
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 17px;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 6px 0;
+    transition:
+        background 0.18s,
+        color 0.18s,
+        box-shadow 0.18s,
+        border-color 0.18s;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    outline: none;
+}
+
+.repo-btn:hover,
+.repo-btn:focus {
+    background: linear-gradient(90deg, var(--color-bg-btn-hover) 0%, var(--color-bg-list) 100%);
+    color: var(--color-text);
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px var(--color-shadow-strong);
+}
+
+.repo-btn:active {
+    background: var(--color-bg-btn-active);
+    color: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 1px 3px var(--color-shadow);
+}

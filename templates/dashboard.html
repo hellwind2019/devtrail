@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="logo">
-
+            DevTrail
         </div>
         <nav class="navbar">
             <ul>
@@ -32,7 +32,7 @@
         <a href="/logout">Вийти</a>
     </div>
     <div class="card">
-        <div id="create-project-form">
+        <div id="create-project-form" class="hidden_button">
             <form method="POST" action="/create-project">
                 <input type="text" name="name" placeholder="Project name" required>
                 <input type="text" name="description" placeholder="Project description"></textarea>
@@ -40,8 +40,8 @@
             </form>
         </div>
         <button id="create-project-button" onclick="toggleForm()">Create new Project</button>
-        <button id="github-repo-btn" onclick="showGitHubRepos()">Project from GitHub repo</button>
-        <button id="close-github-repo-btn" style="display:none;" onclick="closeRepos()">Close</button>
+        <button id="github-repo-btn" onclick="toggleReposList()">Project from GitHub repo</button>
+        <!-- <button id="close-github-repo-btn" class="hidden_button" onclick="closeRepos()">Close</button> -->
         <div id="github-repo-list" style="display:none;"></div>
         <div id="github-modal" class="modal" style="display:none;">
             <div class="modal-content">

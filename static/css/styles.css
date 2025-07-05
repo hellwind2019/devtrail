@@ -1,10 +1,29 @@
-/* Dark theme styles for DevTracker */
+/* Dark theme styles for DevTracker with CSS variables */
+:root {
+    --color-bg: #120a1b;
+    --color-bg-card: #1a1122;
+    --color-bg-list: #1d1426;
+    --color-bg-input: #23172e;
+    --color-bg-btn-hover: #22132a;
+    --color-bg-btn-active: #180c20;
+    --color-text: #eef5f5;
+    --color-accent: #ecb115;
+    --color-accent-light: #ffe7a3;
+    --color-border: #2a1a33;
+    --color-border-accent: #ecb115;
+    --color-shadow: rgba(42, 0, 48, 0.144);
+    --color-shadow-strong: rgba(236, 177, 21, 0.18);
+    --color-link: #ecb115;
+    --color-link-hover: #ffe7a3;
+    --color-bg-header: #231a33;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212;
-    color: #e0e0e0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,9 +33,9 @@ body {
 }
 
 .card {
-    background-color: #1e1e1e;
+    background-color: var(--color-bg-card);
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--color-shadow);
     padding: 20px;
     width: 100%;
     max-width: 700px;
@@ -26,16 +45,19 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
 .welcome-card {
-   margin-top: 80px;
+    margin-top: 160px;
 }
+
 .card form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-#create-project-form {
+
+.hidden_button{
     overflow: hidden;
     width: 100%;
     max-height: 0;
@@ -43,10 +65,11 @@ body {
     transition: max-height 0.4s ease, opacity 0.5s ease-in-out;
 }
 
-#create-project-form.show {
-    max-height: 250px; /* достатньо для форми */
+.hidden_button.show {
+    max-height: 250px;
     opacity: 1;
 }
+
 .card label {
     display: block;
     margin-bottom: 5px;
@@ -54,7 +77,7 @@ body {
 }
 
 h1 {
-    color: #4CAF50;
+    color: var(--color-accent);
     margin-bottom: 20px;
 }
 
@@ -64,26 +87,34 @@ h1 {
     box-sizing: border-box;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #333;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
-    background-color: #2c2c2c;
-    color: #e0e0e0;
+    background-color: var(--color-bg-input);
+    color: var(--color-text);
 }
 
 .card button,
-.card a > button {
+.card a>button {
     width: 100%;
     padding: 15px;
     margin: 15px 0;
     border: none;
     border-radius: 4px;
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
     font-size: 18px;
     cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
+
+.card button:hover,
+.card a>button:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-bg);
+}
+
 .project-page {
-    margin-top: 80px; /* Adjust for fixed header */
+    margin-top: 80px;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -105,7 +136,7 @@ h1 {
 .commits li {
     margin: 10px 0;
     padding: 10px;
-    background-color: #2c2c2c;
+    background-color: var(--color-bg-input);
     border-radius: 4px;
 }
 
@@ -119,32 +150,36 @@ h1 {
     width: 100%;
     height: 100px;
     padding: 10px;
-    border: 1px solid #333;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
-    background-color: #2c2c2c;
-    color: #e0e0e0;
+    background-color: var(--color-bg-input);
+    color: var(--color-text);
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: var(--color-accent-light);
+    color: var(--color-bg);
 }
 
 button.register {
-    background-color: #3b8b3b;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
 }
 
 button.register:hover {
-    background-color: #357a35;
+    background-color: var(--color-accent-light);
+    color: var(--color-bg);
 }
 
 a {
-    color: #4CAF50;
+    color: var(--color-link);
     text-decoration: none;
     margin: 0 10px;
 }
 
 a:hover {
     text-decoration: underline;
+    color: var(--color-link-hover);
 }
 
 .home-actions {
@@ -158,10 +193,10 @@ a:hover {
     display: block;
     width: 100%;
     padding: 15px;
-    border: 2px solid #4CAF50;
+    border: 2px solid var(--color-accent);
     border-radius: 4px;
     background: transparent;
-    color: #4CAF50;
+    color: var(--color-accent);
     font-size: 18px;
     font-weight: bold;
     text-align: center;
@@ -171,49 +206,173 @@ a:hover {
 }
 
 .outline-btn:hover {
-    background: #4CAF50;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(76,175,80,0.2);
+    background: var(--color-accent);
+    color: var(--color-bg);
+    box-shadow: 0 2px 8px var(--color-shadow-strong);
 }
 
-/* Add more styles as needed */
-
-
-header{
-    background-color: #1e1e1e;
-    padding: 10px;
-    text-align: center;
-    position:fixed;
+header {
+    background-color: var(--color-bg-header);
+    padding: 0 0 0 0;
+    position: fixed;
     top: 0;
-    width: 100%;
+    width: 100vw;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--color-shadow);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 64px;
 }
+
+.logo {
+    margin-left: 32px;
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+}
+
 .navbar ul {
     list-style-type: none;
-    margin: 0;
+    margin: 0 32px 0 0;
     padding: 0;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    gap: 0;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar ul li {
+    margin: 0 0 0 8px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar ul li a {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 18px;
+    font-size: 1rem;
+    color: var(--color-text);
+    background: none;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.18s, color 0.18s;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.navbar ul li a:hover {
+    background: var(--color-bg-btn-hover);
+    color: var(--color-accent);
+}
+
+.outline-btn {
+    border: 1.5px solid var(--color-accent);
+    color: var(--color-accent);
+    background: none;
+    font-weight: 600;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    margin-left: 16px;
+    padding: 0 18px;
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: none;
+    letter-spacing: 0.5px;
+}
+
+.outline-btn:hover,
+.outline-btn:focus {
+    background: var(--color-accent);
+    color: var(--color-bg-card);
+    border-color: var(--color-accent);
+}
+
+.navbar ul li:last-child .outline-btn {
+    border: 1.5px solid var(--color-link);
+    color: var(--color-link);
+    background: none;
+    font-weight: 600;
+    margin-left: 24px;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    letter-spacing: 0.5px;
+}
+
+.navbar ul li:last-child .outline-btn:hover,
+.navbar ul li:last-child .outline-btn:focus {
+    background: var(--color-link);
+    color: var(--color-bg-card);
+    border-color: var(--color-link);
 }
 
 #github-repo-list {
-    background-color: #2b2b2b;
+    background-color: var(--color-bg-list);
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--color-shadow);
     padding: 10px;
     margin-top: 10px;
     width: 100%;
-
 }
+
 #github-repo-list ul {
     text-align: left;
     list-style-type: none;
     padding: 0;
-    
 }
+
 #github-repo-list li {
     text-align: left;
     padding: 8px;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--color-border);
     margin: 4px;
+}
+
+#github-repo-list .repo-btn {
+    width: 100%;
+    background: linear-gradient(90deg, var(--color-bg-input) 0%, var(--color-bg-list) 100%);
+    border: 1.5px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-accent);
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 17px;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 6px 0;
+    transition:
+        background 0.18s,
+        color 0.18s,
+        box-shadow 0.18s,
+        border-color 0.18s;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    outline: none;
+}
+
+#github-repo-list .repo-btn:hover,
+#github-repo-list .repo-btn:focus {
+    background: linear-gradient(90deg, var(--color-bg-btn-hover) 0%, var(--color-bg-list) 100%);
+    color: var(--color-text);
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px var(--color-shadow-strong);
+}
+
+#github-repo-list .repo-btn:active {
+    background: var(--color-bg-btn-active);
+    color: var(--color-accent-light);
+    border-color: var(--color-accent);
+    box-shadow: 0 1px 3px var(--color-shadow);
 }

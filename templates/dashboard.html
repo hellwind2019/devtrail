@@ -18,7 +18,8 @@
                 <li><a href="/settings">Налаштування</a></li>
                 <li><a href="/logout">Вийти</a></li>
                 <li>
-                    <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{.OAuthInfo.ClientID}}" class="outline-btn">Login via GitHub</a>
+                    <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{.OAuthInfo.ClientID}}"
+                        class="outline-btn">Login via GitHub</a>
                 </li>
             </ul>
         </nav>
@@ -37,7 +38,9 @@
             </form>
         </div>
         <button id="create-project-button" onclick="toggleForm()">Create new Project</button>
-
+        <button id="github-repo-btn" onclick="showGitHubRepos()">Project from GitHub repo</button>
+        <button id="close-github-repo-btn" style="display:none;" onclick="closeRepos()">Close</button>
+        <div id="github-repo-list" style="display:none;"></div>
 
     </div>
     {{range .Projects}}
@@ -76,7 +79,28 @@
     function loadProject(projectId) {
         window.location.href = "/projects/" + projectId;
     }
+    async function showGitHubRepos() {
+        const close_button = document.getElementById("close-github-repo-btn");
+        close_button.style.display = "inline-block";
+        close_button.style.backgroundColor = "#f44336";
 
+        const listDiv = document.getElementById("github-repo-list");
+        listDiv.innerHTML = "Loading...";
+        listDiv.style.display = "block";
+        const resp = await fetch("/user/repos");
+        if (!resp.ok) {
+            listDiv.innerHTML = "Failed to load repositories.";
+            return;
+        }
+        const repos = await resp.json();
+        listDiv.innerHTML = "<ul>" + repos.map(r => `<li>${r.full_name}</li>`).join("") + "</ul>";
+    }
+    function closeRepos(){
+        const listDiv = document.getElementById("github-repo-list");
+        listDiv.style.display = "none";
+        const close_button = document.getElementById("close-github-repo-btn");
+        close_button.style.display = "none";
+    }
 </script>
 
 </html>

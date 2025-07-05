@@ -195,3 +195,25 @@ header{
     flex-direction: row;
     justify-content: center;
 }
+
+#github-repo-list {
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-top: 10px;
+    width: 100%;
+
+}
+#github-repo-list ul {
+    text-align: left;
+    list-style-type: none;
+    padding: 0;
+    
+}
+#github-repo-list li {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    margin: 4px;
+}

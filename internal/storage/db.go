@@ -128,17 +128,7 @@ func GetUserIDByUsername(username string) (int, error) {
 	}
 	return userID, nil
 }
-func SaveGitHubToken(userID int, token string) error {
-	if db == nil {
-		log.Fatal("Database connection is not initialized")
-	}
-	query := `UPDATE users SET github_token = ? WHERE id = ?`
-	_, err := db.Exec(query, token, userID)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+
 func AuthenticateUser(user models.User) (bool, error) {
 	query := `SELECT password FROM users WHERE username = ?`
 	row := db.QueryRow(query, user.Username)
@@ -155,6 +145,34 @@ func AuthenticateUser(user models.User) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func GetGitHubTokenByUsername(username string) (string, error) {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `SELECT github_token FROM users WHERE username = ?`
+	row := db.QueryRow(query, username)
+
+	var token string
+	err := row.Scan(&token)
+	if err == sql.ErrNoRows {
+		return "", errors.New("token not found")
+	} else if err != nil {
+		return "", err
+	}
+	return token, nil
+}
+func SaveGitHubToken(userID int, token string) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `UPDATE users SET github_token = ? WHERE id = ?`
+	_, err := db.Exec(query, token, userID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 func CreateProject(project models.Project) error {
 	if db == nil {

@@ -9,7 +9,7 @@ import (
 )
 
 func HandleCreateProject(w http.ResponseWriter, r *http.Request) {
-	username, shouldReturn := getSessionUser(r, w)
+	username, shouldReturn := GetSessionUser(r, w)
 	if shouldReturn {
 		return
 	}
@@ -39,7 +39,7 @@ func HandleCreateProject(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
 
-func getSessionUser(r *http.Request, w http.ResponseWriter) (string, bool) {
+func GetSessionUser(r *http.Request, w http.ResponseWriter) (string, bool) {
 	session, _ := store.Get(r, AuthSessionName)
 	username, ok := session.Values["username"].(string)
 	if !ok || username == "" {
@@ -50,7 +50,7 @@ func getSessionUser(r *http.Request, w http.ResponseWriter) (string, bool) {
 }
 func HandleDeleteProject(w http.ResponseWriter, r *http.Request) {
 	// Перевірка сесії користувача
-	_, shouldReturn := getSessionUser(r, w)
+	_, shouldReturn := GetSessionUser(r, w)
 	if shouldReturn {
 		return
 	}
@@ -77,7 +77,7 @@ func HandleDeleteProject(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 func HandleProjectPage(w http.ResponseWriter, r *http.Request) {
-	username, shouldReturn := getSessionUser(r, w)
+	username, shouldReturn := GetSessionUser(r, w)
 	if shouldReturn {
 		return
 	}

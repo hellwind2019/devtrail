@@ -128,7 +128,17 @@ func GetUserIDByUsername(username string) (int, error) {
 	}
 	return userID, nil
 }
-
+func SaveGitHubToken(userID int, token string) error {
+	if db == nil {
+		log.Fatal("Database connection is not initialized")
+	}
+	query := `UPDATE users SET github_token = ? WHERE id = ?`
+	_, err := db.Exec(query, token, userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func AuthenticateUser(user models.User) (bool, error) {
 	query := `SELECT password FROM users WHERE username = ?`
 	row := db.QueryRow(query, user.Username)

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"devtrail/internal/models"
+	"devtrail/internal/storage"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -46,10 +47,12 @@ func HandleGitHubAuth(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		token := result["access_token"].(string)
-		session, _ := store.Get(r, "gh-token")
-		session.Values["github_token"] = token
-		session.Save(r, w)
-
+		user, sr := GetSessionUser(r, w)
+		if sr {
+			return
+		}
+		userID, _ := storage.GetUserIDByUsername(user)
+		storage.SaveGitHubToken(userID, token)
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}

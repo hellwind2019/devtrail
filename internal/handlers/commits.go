@@ -9,7 +9,7 @@ import (
 )
 
 func HandleAddCommit(w http.ResponseWriter, r *http.Request) {
-	_, err := getSessionUser(r, w)
+	_, err := GetSessionUser(r, w)
 	if err {
 		return
 	}

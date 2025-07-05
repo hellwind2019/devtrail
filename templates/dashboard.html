@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Мій кабінет</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/modals.css">
+
 </head>
 
 <body>
@@ -41,7 +43,20 @@
         <button id="github-repo-btn" onclick="showGitHubRepos()">Project from GitHub repo</button>
         <button id="close-github-repo-btn" style="display:none;" onclick="closeRepos()">Close</button>
         <div id="github-repo-list" style="display:none;"></div>
-
+        <div id="github-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeGithubModal()">&times;</span>
+                <h2 id="modal-repo-name"></h2>
+                <form id="import-github-form" onsubmit="return importGithubProject(event)">
+                    <input type="hidden" name="repo_full_name" id="modal-repo-fullname">
+                    <label>Project name:</label>
+                    <input type="text" name="name" id="modal-project-name" required>
+                    <label>Description:</label>
+                    <input type="text" name="description" id="modal-project-desc">
+                    <button type="submit">Імпортувати</button>
+                </form>
+            </div>
+        </div>
     </div>
     {{range .Projects}}
     <div class="card" id="project-{{.ProjectID}}" onclick="loadProject('{{ .ProjectID }}')">
@@ -54,53 +69,6 @@
 
 </body>
 
-<script>
-    function toggleForm() {
-        var form = document.getElementById("create-project-form");
-        var button = document.getElementById("create-project-button");
-        button.textContent = (form.classList.contains("show")) ? "Create new Project" : "Cancel";
-        button.style.backgroundColor = (form.classList.contains("show")) ? "#4CAF50" : "#f44336";
-        form.classList.toggle("show");
-    }
-    function deleteProject(projectId) {
-        var projectCard = document.getElementById("project-" + projectId);
-        if (confirm("Are you sure you want to delete this project?")) {
-            fetch("/delete-project/" + projectId, {
-                method: "DELETE"
-            }).then(response => {
-                if (response.ok) {
-                    projectCard.remove();
-                } else {
-                    alert("Failed to delete project.");
-                }
-            });
-        }
-    }
-    function loadProject(projectId) {
-        window.location.href = "/projects/" + projectId;
-    }
-    async function showGitHubRepos() {
-        const close_button = document.getElementById("close-github-repo-btn");
-        close_button.style.display = "inline-block";
-        close_button.style.backgroundColor = "#f44336";
-
-        const listDiv = document.getElementById("github-repo-list");
-        listDiv.innerHTML = "Loading...";
-        listDiv.style.display = "block";
-        const resp = await fetch("/user/repos");
-        if (!resp.ok) {
-            listDiv.innerHTML = "Failed to load repositories.";
-            return;
-        }
-        const repos = await resp.json();
-        listDiv.innerHTML = "<ul>" + repos.map(r => `<li>${r.full_name}</li>`).join("") + "</ul>";
-    }
-    function closeRepos(){
-        const listDiv = document.getElementById("github-repo-list");
-        listDiv.style.display = "none";
-        const close_button = document.getElementById("close-github-repo-btn");
-        close_button.style.display = "none";
-    }
-</script>
+<script src="/static/js/dashboard.js"></script>
 
 </html>

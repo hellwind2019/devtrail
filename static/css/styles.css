@@ -385,3 +385,45 @@ header {
     border-color: var(--color-accent);
     box-shadow: 0 1px 3px var(--color-shadow);
 }
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 32px auto 0 auto;
+    padding: 0 24px; /* збільшено паддінг для горизонтальних відступів */
+    box-sizing: border-box;
+    align-items: stretch;
+}
+
+.projects-grid .card {
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    text-align: left;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: box-shadow 0.18s;
+    padding: 20px 18px 20px 18px; /* додано горизонтальний паддінг */
+    box-sizing: border-box;
+}
+
+.projects-grid .card:hover {
+    box-shadow: 0 6px 18px var(--color-shadow-strong);
+}
+
+@media (max-width: 900px) {
+    .projects-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}

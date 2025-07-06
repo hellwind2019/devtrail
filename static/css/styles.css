@@ -326,8 +326,17 @@ header {
     padding: 10px;
     margin-top: 10px;
     width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(.4,0,.2,1), opacity 0.4s;
 }
 
+#github-repo-list.show {
+    max-height: 400px; /* достатньо для вашого списку */
+    opacity: 1;
+    overflow: auto;
+}
 #github-repo-list ul {
     text-align: left;
     list-style-type: none;

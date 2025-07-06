@@ -25,21 +25,22 @@ function loadProject(projectId) {
 async function toggleReposList() {
     const listDiv = document.getElementById("github-repo-list");
     const repos_button = document.getElementById("github-repo-btn");
-    const create_porject_button = document.getElementById("create-project-button");
+    const create_project_button = document.getElementById("create-project-button");
     //TODO: add animation to buttons
-    if (listDiv.style.display === "block") {
+    if (listDiv.classList.contains("show")) {
         repos_button.textContent = "Project from GitHub repo";
-        listDiv.style.display = "none";
-        create_porject_button.style.display = "block";
+        listDiv.classList.remove("show");
+        create_project_button.style.display = "block";
         return;
     } 
-    create_porject_button.style.display = "none";
+    create_project_button.style.display = "none";
     repos_button.textContent = "Close";
-    listDiv.style.display = "block";
+    listDiv.classList.add("show");
     listDiv.innerHTML = "Loading...";
     await loadRepos();
-   
-
+    setTimeout(() => {
+        listDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50); // 400мс — трохи менше, ніж transition у CSS
 }
 async function loadRepos() {
     const listDiv = document.getElementById("github-repo-list");
